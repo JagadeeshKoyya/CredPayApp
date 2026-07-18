@@ -9,11 +9,54 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- checkout: self
-- script: |
-    echo Displaying Folder Structure of the Project
-    pwd
-    ls
-  displayName: 'Project Structure'
+variables:
+  acrserviceconnection: crepay-acr
+  tag: '{Build.BuildId}'
+  frontendrepo: credpay/frontend_service
+  paymentservicerepo : credpay/payment_service
+  userservicerepo: credpay/user_service
+
+stages:
+  - stage: Docker 
+    displayName: Docker Build and Push
+    jobs:
+      - job: BuildandPushImages
+        steps:
+          - checkout: self
+          - script: |
+              echo "Repository : ${Build.Repository.Name}"
+              echo "Branch     : ${Build.SourceBranch}"
+              echo "Build ID   : ${Build.BuildId}"
+              echo "Image Tag  : ${tag}"
+            displayName: Build Information
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'credpay-acr'
+              repository: '${frontendrepo}'
+              command: 'buildAndPush'
+              Dockerfile: 'frontend-react/Dockerfile'
+              tags: |
+                ${tag}
+                latest
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'credpay-acr'
+              repository: '${paymentservicerepo}'
+              command: 'buildAndPush'
+              Dockerfile: 'payment-service/Dockerfile'
+              tags: |
+                ${tag}
+                latest
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'credpay-acr'
+              repository: '${uerservicerepo}'
+              command: 'buildAndPush'
+              Dockerfile: 'user-service/Dockerfile'
+              tags: |
+                ${tag}
+                latest
+
+
+
 
