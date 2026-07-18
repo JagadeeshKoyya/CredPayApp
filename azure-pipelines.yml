@@ -11,7 +11,7 @@ pool:
 
 variables:
   acrserviceconnection: crepay-acr
-  tag: '{Build.BuildId}'
+  tag: '$(Build.BuildId)'
   frontendrepo: credpay/frontend_service
   paymentservicerepo : credpay/payment_service
   userservicerepo: credpay/user_service
