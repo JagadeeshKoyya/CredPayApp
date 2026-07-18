@@ -24,37 +24,37 @@ stages:
         steps:
           - checkout: self
           - script: |
-              echo "Repository : ${Build.Repository.Name}"
-              echo "Branch     : ${Build.SourceBranch}"
-              echo "Build ID   : ${Build.BuildId}"
-              echo "Image Tag  : ${tag}"
+              echo "Repository : $(Build.Repository.Name)"
+              echo "Branch     : $(Build.SourceBranch)"
+              echo "Build ID   : $(Build.BuildId)"
+              echo "Image Tag  : $(tag)"
             displayName: Build Information
           - task: Docker@2
             inputs:
               containerRegistry: 'credpay-acr'
-              repository: '${frontendrepo}'
+              repository: '$(frontendrepo)'
               command: 'buildAndPush'
               Dockerfile: 'frontend-react/Dockerfile'
               tags: |
-                ${tag}
+                $(tag)
                 latest
           - task: Docker@2
             inputs:
               containerRegistry: 'credpay-acr'
-              repository: '${paymentservicerepo}'
+              repository: '$(paymentservicerepo)'
               command: 'buildAndPush'
               Dockerfile: 'payment-service/Dockerfile'
               tags: |
-                ${tag}
+                $(tag)
                 latest
           - task: Docker@2
             inputs:
               containerRegistry: 'credpay-acr'
-              repository: '${uerservicerepo}'
+              repository: '$(userservicerepo)'
               command: 'buildAndPush'
               Dockerfile: 'user-service/Dockerfile'
               tags: |
-                ${tag}
+                $(tag)
                 latest
 
 
