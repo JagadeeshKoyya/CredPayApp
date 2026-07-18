@@ -13,8 +13,8 @@ RUN pip install -r requirements.txt
 COPY app ./app
 
 #create and switch to a non-root user to run the application
-#RUN useradd --create-home --uid 10001 appuser
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN useradd --create-home --uid 10001 appuser
+#RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
 #Expose port 8000 to the outside world
